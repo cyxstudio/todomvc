@@ -22,12 +22,12 @@
 					<input id="toggle-all" class="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)">
 					<label for="toggle-all">Mark all as complete</label>
 					<ul class="todo-list">
-						<li ng-repeat="todo in todos | filter:statusFilter track by $index" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
-							<div class="view">
-								<input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="toggleCompleted(todo)">
-								<label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
-								<button class="destroy" ng-click="removeTodo(todo)"></button>
-							</div>
+					  <li ng-repeat="todo in todos | orderBy: toggleDateSort ? '-date' : 'date' | filter:statusFilter track by $index" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+						<div class="view">
+							<input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="toggleCompleted(todo)">
+							<label ng-dblclick="editTodo(todo)">{{todo.title}} {{todo.date | date : "dd/MM/yyyy"}}</label>
+							<button class="destroy" ng-click="removeTodo(todo)"></button>
+						</div>
 							<form ng-submit="saveEdits(todo, 'submit')">
 								<input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEdits(todo)" ng-blur="saveEdits(todo, 'blur')" todo-focus="todo == editedTodo">
 							</form>
@@ -35,7 +35,7 @@
 					</ul>
 				</section>
 				<footer class="footer" ng-show="todos.length" ng-cloak>
-					<span class="todo-count"><strong>{{remainingCount}}</strong>
+					<span class="todo-count"><strong>{{remainingCount }} / {{todos.length}}</strong>
 						<ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
 					</span>
 					<ul class="filters">
@@ -49,6 +49,7 @@
 							<a ng-class="{selected: status == 'completed'}" href="#/completed">Completed</a>
 						</li>
 					</ul>
+					<button class="sortTitleByDate" ng-click="toggleDateSort =!toggleDateSort" >Sort</button>
 					<button class="clear-completed" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed</button>
 				</footer>
 			</section>
