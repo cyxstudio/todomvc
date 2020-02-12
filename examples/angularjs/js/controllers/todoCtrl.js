@@ -31,11 +31,18 @@ angular.module('todomvc')
 		$scope.addTodo = function () {
 			var newTodo = {
 				title: $scope.newTodo.trim(),
+				date: new Date(),
 				completed: false
 			};
 
 			if (!newTodo.title) {
 				return;
+			}
+			
+			for (let text in todos) {
+				if (todos[text].title.trim() == newTodo.title.trim()) {
+					return;
+				}
 			}
 
 			$scope.saving = true;
