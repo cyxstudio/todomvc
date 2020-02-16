@@ -12,6 +12,7 @@ var app = app || {};
 		render: function () {
 			var activeTodoWord = app.Utils.pluralize(this.props.count, 'item');
 			var clearButton = null;
+			var sortButton = null;
 
 			if (this.props.completedCount > 0) {
 				clearButton = (
@@ -23,11 +24,13 @@ var app = app || {};
 				);
 			}
 
+			sortButton = (<button className="sortOnClick" onClick={this.props.onSortByDate} >Sort</button> )
+
 			var nowShowing = this.props.nowShowing;
 			return (
 				<footer className="footer">
 					<span className="todo-count">
-						<strong>{this.props.count}</strong> {activeTodoWord} left
+						<strong>{this.props.count} / {this.props.totalAll}</strong> {activeTodoWord} left
 					</span>
 					<ul className="filters">
 						<li>
@@ -54,6 +57,7 @@ var app = app || {};
 							</a>
 						</li>
 					</ul>
+					{sortButton}
 					{clearButton}
 				</footer>
 			);
