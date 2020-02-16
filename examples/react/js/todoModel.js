@@ -4,10 +4,12 @@
 /*jshint newcap:false */
 var app = app || {};
 
+
 (function () {
 	'use strict';
 
 	var Utils = app.Utils;
+	
 	// Generic "model" object. You can use whatever
 	// framework you want. For this application it
 	// may not even be worth separating this logic
@@ -20,18 +22,30 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.subscribe = function (onChange) {
+		console.log(onChange)
 		this.onChanges.push(onChange);
 	};
 
 	app.TodoModel.prototype.inform = function () {
 		Utils.store(this.key, this.todos);
 		this.onChanges.forEach(function (cb) { cb(); });
-	};
+	};	
 
 	app.TodoModel.prototype.addTodo = function (title) {
+		for (let text in this.todos) {
+			if (this.todos[text].title === title + " " + new Date().getDate() + "/" +  (new Date().getMonth()+1) + "/" + new Date().getFullYear()) {
+				return;
+			}
+		}
+
+		//let currentDate = new Date().getDate() + "/" + (new Date().getMonth() + 1)+ "/" + new Date().getFullYear();
+		
+		let currentDate = new Date();
+
 		this.todos = this.todos.concat({
 			id: Utils.uuid(),
-			title: title,
+			title: title + " " + currentDate.getDate() + "/" +  (currentDate.getMonth()+1) + "/" + currentDate.getFullYear(),
+			date: new Date(currentDate),
 			completed: false
 		});
 
@@ -80,6 +94,25 @@ var app = app || {};
 		this.todos = this.todos.filter(function (todo) {
 			return !todo.completed;
 		});
+
+		this.inform();
+	};
+
+	app.TodoModel.prototype.sortByDate = function () {
+		
+		console.log(app.asc)
+		let toBeSorted = this.todos
+		let sortedTodos;
+
+		if (app.asc === true) {
+			sortedTodos = toBeSorted.sort((a, b) => new Date(b.date) - new Date(a.date))
+			app.asc = false;
+		} else if (app.asc === false) {
+			sortedTodos = toBeSorted.sort((a, b) => new Date(a.date) - new Date(b.date))
+			app.asc = true;
+		}    
+		console.log("toBeSorted", toBeSorted)
+		console.log("sorted", sortedTodos)
 
 		this.inform();
 	};
