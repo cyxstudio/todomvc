@@ -50,12 +50,13 @@ var app = app || {};
 		 * This is a completely optional performance enhancement that you can
 		 * implement on any React component. If you were to delete this method
 		 * the app would still work correctly (and still be very performant!), we
-		 * just use it as an example of how little code it takes to get an order
+		 * just use it as an example of how little code it takes to get an order	
 		 * of magnitude performance improvement.
 		 */
 		shouldComponentUpdate: function (nextProps, nextState) {
 			return (
 				nextProps.todo !== this.props.todo ||
+				nextProps.date !== this.props.date ||
 				nextProps.editing !== this.props.editing ||
 				nextState.editText !== this.state.editText
 			);
@@ -75,7 +76,7 @@ var app = app || {};
 			}
 		},
 
-		render: function () {
+		render: function () {   // {this.props.todo.date} line 100
 			return (
 				<li className={classNames({
 					completed: this.props.todo.completed,
@@ -88,15 +89,15 @@ var app = app || {};
 							checked={this.props.todo.completed}
 							onChange={this.props.onToggle}
 						/>
-						<label onDoubleClick={this.handleEdit}>
-							{this.props.todo.title}
+						<label onDoubleClick={this.handleEdit}> 
+							{this.props.todo.title}  
 						</label>
 						<button className="destroy" onClick={this.props.onDestroy} />
 					</div>
 					<input
 						ref="editField"
 						className="edit"
-						value={this.state.editText}
+						value={this.state.editText} 
 						onBlur={this.handleSubmit}
 						onChange={this.handleChange}
 						onKeyDown={this.handleKeyDown}
