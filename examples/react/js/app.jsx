@@ -13,6 +13,8 @@ var app = app || {};
 	app.COMPLETED_TODOS = 'completed';
 	var TodoFooter = app.TodoFooter;
 	var TodoItem = app.TodoItem;
+	app.asc = true;
+
 
 	var ENTER_KEY = 13;
 
@@ -46,9 +48,12 @@ var app = app || {};
 
 			event.preventDefault();
 
-			var val = this.state.newTodo.trim();
+			//let currentDate = new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear();
+
+			var val = this.state.newTodo.trim() ;
 
 			if (val) {
+				//this.props.model.addTodo(val + new Date());
 				this.props.model.addTodo(val);
 				this.setState({newTodo: ''});
 			}
@@ -84,7 +89,12 @@ var app = app || {};
 			this.props.model.clearCompleted();
 		},
 
+		sortByDate: function () {
+			this.props.model.sortByDate();
+		},
+
 		render: function () {
+			
 			var footer;
 			var main;
 			var todos = this.props.model.todos;
@@ -120,14 +130,17 @@ var app = app || {};
 			}, 0);
 
 			var completedCount = todos.length - activeTodoCount;
+			var totalAll = todos.length
 
 			if (activeTodoCount || completedCount) {
 				footer =
 					<TodoFooter
 						count={activeTodoCount}
 						completedCount={completedCount}
+						totalAll = {totalAll}
 						nowShowing={this.state.nowShowing}
 						onClearCompleted={this.clearCompleted}
+						onSortByDate={this.sortByDate}
 					/>;
 			}
 
